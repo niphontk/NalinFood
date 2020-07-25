@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food/utility/my_style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class AddInfoShop extends StatefulWidget {
   @override
@@ -8,6 +9,34 @@ class AddInfoShop extends StatefulWidget {
 }
 
 class _AddInfoShopState extends State<AddInfoShop> {
+  //Field
+  double lat, lng;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    findLatLng();
+  }
+
+  Future<Null> findLatLng() async {
+    LocationData locationData = await findLocationData();
+    setState(() {
+      lat = locationData.latitude;
+      lng = locationData.longitude;
+    });
+    print('lat = $lat lng = $lng');
+  }
+
+  Future<LocationData> findLocationData() async {
+    Location location = Location();
+    try {
+      return location.getLocation();
+    } catch (e) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +55,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
             MyStyle().mySizebox(),
             groupImage(),
             MyStyle().mySizebox(),
-            showMap(),
+            lat == null ? MyStyle().showProgress() : showMap(),
             MyStyle().mySizebox(),
             saveButton()
           ],
@@ -36,17 +65,38 @@ class _AddInfoShopState extends State<AddInfoShop> {
   }
 
   Widget saveButton() {
-    return Container(width: MediaQuery.of(context).size.width,
-      child: RaisedButton.icon(color: MyStyle().primaryColor,
-              onPressed: () {},
-              icon: Icon(Icons.save,color: Colors.white,),
-              label: Text('Save Infomation',style: TextStyle(color: Colors.white),),
-            ),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: RaisedButton.icon(
+        color: MyStyle().primaryColor,
+        onPressed: () {},
+        icon: Icon(
+          Icons.save,
+          color: Colors.white,
+        ),
+        label: Text(
+          'Save Infomation',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
     );
   }
 
+  Set<Marker> myMarker() {
+    return <Marker>[
+      Marker(
+        markerId: MarkerId('myShop'),
+        position: LatLng(lat, lng),
+        infoWindow: InfoWindow(
+          title: 'ร้านของคุณ',
+          snippet: 'ละติจูด = $lat ลองติจูด = $lng',
+        ),
+      )
+    ].toSet();
+  }
+
   Container showMap() {
-    LatLng latLng = LatLng(15.609507, 105.018462);
+    LatLng latLng = LatLng(lat, lng);
     CameraPosition cameraPosition = CameraPosition(
       target: latLng,
       zoom: 16.0,
@@ -58,6 +108,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
         initialCameraPosition: cameraPosition,
         mapType: MapType.normal,
         onMapCreated: (controller) {},
+        markers: myMarker(),
       ),
     );
   }
