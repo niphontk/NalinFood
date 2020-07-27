@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to your location for NalinFood Tutorial</string>
+    <key>NSLocationAlwaysUseUsageDescription</key>
+    <string>This app requires access to your location for NalinFood Tutorial</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -41,5 +45,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app require Phpto Upload to Server</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app require Camera Upload to Server</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app require Microphone Upload to Server</string>
 </dict>
 </plist>

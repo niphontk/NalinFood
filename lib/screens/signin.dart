@@ -6,6 +6,7 @@ import 'package:food/model/user_model.dart';
 import 'package:food/screens/main_rider.dart';
 import 'package:food/screens/main_shop.dart';
 import 'package:food/screens/main_user.dart';
+import 'package:food/utility/my_constant.dart';
 import 'package:food/utility/my_style.dart';
 import 'package:food/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,7 +79,7 @@ class _SignInState extends State<SignIn> {
 
   Future<Null> checkAuthen() async {
     String url =
-        'http://192.168.63.98/nalinfood/getUserWhereUserMaster.php?isAdd=true&User=$user';
+        '${MyConstant().domain}/nalinfood/getUserWhereUserMaster.php?isAdd=true&User=$user';
     try {
       Response response = await Dio().get(url);
       print('res = $response');

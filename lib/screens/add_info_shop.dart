@@ -1,7 +1,15 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:food/utility/my_constant.dart';
 import 'package:food/utility/my_style.dart';
+import 'package:food/utility/normal_dialog.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddInfoShop extends StatefulWidget {
   @override
@@ -11,6 +19,8 @@ class AddInfoShop extends StatefulWidget {
 class _AddInfoShopState extends State<AddInfoShop> {
   //Field
   double lat, lng;
+  File file;
+  String nameShop, address, phone, urlImage;
 
   @override
   void initState() {
@@ -69,7 +79,20 @@ class _AddInfoShopState extends State<AddInfoShop> {
       width: MediaQuery.of(context).size.width,
       child: RaisedButton.icon(
         color: MyStyle().primaryColor,
-        onPressed: () {},
+        onPressed: () {
+          if (nameShop == null ||
+              nameShop.isEmpty ||
+              address == null ||
+              address.isEmpty ||
+              phone == null ||
+              phone.isEmpty) {
+            normalDialog(context, 'กรุณากรอกทุกช่อง');
+          } else if (file == null) {
+            normalDialog(context, 'กรุณาเลือกรูปภาพ');
+          } else {
+            uploadImage();
+          }
+        },
         icon: Icon(
           Icons.save,
           color: Colors.white,
@@ -80,6 +103,41 @@ class _AddInfoShopState extends State<AddInfoShop> {
         ),
       ),
     );
+  }
+
+  Future<Null> uploadImage() async{
+    Random random = Random();
+    int i = random.nextInt(1000000);
+    String nameImage ='shop$i.jpg';
+
+    String url = '${MyConstant().domain}/nalinfood/saveFile.php';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] = await MultipartFile.fromFile(file.path, filename: nameImage);
+      FormData formData = FormData.fromMap(map);
+      await Dio().post(url, data: formData).then((value) {
+        print('Respone ==>> $value');
+        urlImage = '/nalinfood/Shop/$nameImage';
+        print('urlImage $urlImage');
+        editUserShop();
+      });
+    } catch (e) {
+    }
+  }
+
+  Future<Null> editUserShop()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String id = preferences.get('id');
+
+    String url = '${MyConstant().domain}/nalinfood/editUserWhereId.php?isAdd=true&id=$id&NameShop=$nameShop&Address=$address&Phone=$phone&UrlPicture=$urlImage&Lat=$lat&Lng=$lng';
+    await Dio().get(url).then((value) {
+      if (value.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normalDialog(context, 'กรุณาลองใหม่');
+      }
+    });
   }
 
   Set<Marker> myMarker() {
@@ -118,24 +176,40 @@ class _AddInfoShopState extends State<AddInfoShop> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         IconButton(
-            icon: Icon(
-              Icons.add_a_photo,
-              size: 36.0,
-            ),
-            onPressed: () {}),
+          icon: Icon(
+            Icons.add_a_photo,
+            size: 36.0,
+          ),
+          onPressed: () => chooseImage(ImageSource.camera),
+        ),
         Container(
           width: 250.0,
-          child: Image.asset('images/myimage.png'),
+          child: file == null
+              ? Image.asset('images/myimage.png')
+              : Image.file(file),
         ),
         IconButton(
           icon: Icon(
             Icons.add_photo_alternate,
             size: 36.0,
           ),
-          onPressed: () {},
+          onPressed: () => chooseImage(ImageSource.gallery),
         )
       ],
     );
+  }
+
+  Future<Null> chooseImage(ImageSource imageSource) async {
+    try {
+      var object = await ImagePicker.pickImage(
+        source: imageSource,
+        maxHeight: 800.0,
+        maxWidth: 800.0,
+      );
+      setState(() {
+        file = object;
+      });
+    } catch (e) {}
   }
 
   Widget nameForm() => Row(
@@ -144,6 +218,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
           Container(
             width: 250.0,
             child: TextField(
+              onChanged: (value) => nameShop = value.trim(),
               decoration: InputDecoration(
                 labelText: 'ชื่อร้านค้า :',
                 prefixIcon: Icon(Icons.account_box),
@@ -160,6 +235,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
           Container(
             width: 250.0,
             child: TextField(
+              onChanged: (value) => address = value.trim(),
               decoration: InputDecoration(
                 labelText: 'ที่อยู่ร้านค้า :',
                 prefixIcon: Icon(Icons.home),
@@ -176,6 +252,7 @@ class _AddInfoShopState extends State<AddInfoShop> {
           Container(
             width: 250.0,
             child: TextField(
+              onChanged: (value) => phone = value.trim(),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'เบอร์โทรร้านค้า :',
