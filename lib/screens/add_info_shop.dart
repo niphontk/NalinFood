@@ -105,16 +105,17 @@ class _AddInfoShopState extends State<AddInfoShop> {
     );
   }
 
-  Future<Null> uploadImage() async{
+  Future<Null> uploadImage() async {
     Random random = Random();
     int i = random.nextInt(1000000);
-    String nameImage ='shop$i.jpg';
+    String nameImage = 'shop$i.jpg';
 
     String url = '${MyConstant().domain}/nalinfood/saveFile.php';
 
     try {
       Map<String, dynamic> map = Map();
-      map['file'] = await MultipartFile.fromFile(file.path, filename: nameImage);
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: nameImage);
       FormData formData = FormData.fromMap(map);
       await Dio().post(url, data: formData).then((value) {
         print('Respone ==>> $value');
@@ -122,15 +123,15 @@ class _AddInfoShopState extends State<AddInfoShop> {
         print('urlImage $urlImage');
         editUserShop();
       });
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
-  Future<Null> editUserShop()async{
+  Future<Null> editUserShop() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String id = preferences.get('id');
 
-    String url = '${MyConstant().domain}/nalinfood/editUserWhereId.php?isAdd=true&id=$id&NameShop=$nameShop&Address=$address&Phone=$phone&UrlPicture=$urlImage&Lat=$lat&Lng=$lng';
+    String url =
+        '${MyConstant().domain}/nalinfood/editUserWhereId.php?isAdd=true&id=$id&NameShop=$nameShop&Address=$address&Phone=$phone&UrlPicture=$urlImage&Lat=$lat&Lng=$lng';
     await Dio().get(url).then((value) {
       if (value.toString() == 'true') {
         Navigator.pop(context);
@@ -201,13 +202,13 @@ class _AddInfoShopState extends State<AddInfoShop> {
 
   Future<Null> chooseImage(ImageSource imageSource) async {
     try {
-      var object = await ImagePicker.pickImage(
+      var object = await ImagePicker().getImage(
         source: imageSource,
-        maxHeight: 800.0,
         maxWidth: 800.0,
+        maxHeight: 800.0,
       );
       setState(() {
-        file = object;
+        file = File(object.path);
       });
     } catch (e) {}
   }

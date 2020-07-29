@@ -31,9 +31,7 @@ class _InfomationShopState extends State<InfomationShop> {
     String url =
         '${MyConstant().domain}/nalinfood/getUserWhereId.php?isAdd=true&id=$id';
     await Dio().get(url).then((value) {
-      // print('value = $value');
       var result = json.decode(value.data);
-      // print('result = $result');
       for (var map in result) {
         setState(() {
           userModel = UserModel.fromJson(map);
@@ -48,7 +46,7 @@ class _InfomationShopState extends State<InfomationShop> {
     MaterialPageRoute materialPageRoute = MaterialPageRoute(
       builder: (context) => widget,
     );
-    Navigator.push(context, materialPageRoute);
+    Navigator.push(context, materialPageRoute).then((value) => readDataUser());
   }
 
   @override
