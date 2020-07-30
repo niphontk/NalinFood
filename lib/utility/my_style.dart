@@ -22,6 +22,10 @@ class MyStyle {
         height: 16.0,
       );
 
+  TextStyle mainTitle = TextStyle(color: Colors.purple,fontSize: 20.0,fontWeight: FontWeight.bold);
+
+  TextStyle mainTitleH2 = TextStyle(color: Colors.green,fontSize: 18.0,fontWeight: FontWeight.bold);
+
   Widget titleCenter(BuildContext context, String string) {
     return Center(
       child: Container(width: MediaQuery.of(context).size.width*0.5,
@@ -49,6 +53,15 @@ class MyStyle {
         title,
         style: TextStyle(
           fontSize: 18.0,
+          color: Colors.blue.shade900,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+
+        Text showTitleH3(String title) => Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.0,
           color: Colors.blue.shade900,
           fontWeight: FontWeight.bold,
         ),

@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:food/utility/my_constant.dart';
 import 'package:food/utility/my_style.dart';
 import 'package:food/utility/normal_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddFoodMenu extends StatefulWidget {
   @override
@@ -54,7 +58,9 @@ class _AddFoodMenuState extends State<AddFoodMenu> {
               detail == null ||
               detail.isEmpty) {
             normalDialog(context, 'กรุณากรอกทุกช่อง');
-          } else {}
+          } else {
+            uploadFoodAndInsertData();
+          }
         },
         icon: Icon(
           Icons.save,
@@ -66,6 +72,31 @@ class _AddFoodMenuState extends State<AddFoodMenu> {
         ),
       ),
     );
+  }
+
+  Future<Null> uploadFoodAndInsertData() async {
+    String urlUpload = '${MyConstant().domain}/nalinfood/saveFood.php';
+    Random random = Random();
+    int i = random.nextInt(1000000);
+    String nameFile = 'food$i.jpg';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] = await MultipartFile.fromFile(file.path, filename: nameFile);
+      FormData formData = FormData.fromMap(map);
+
+      await Dio().post(urlUpload, data: formData).then((value) async {
+        String urlPathImage = '/nalinfood/Food/$nameFile';
+        print('urlPathImage = ${MyConstant().domain}$urlPathImage');
+
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String idShop = preferences.getString('id');
+
+        String urlInsertData =
+            '${MyConstant().domain}/nalinfood/addFood.php?isAdd=true&idShop=$idShop&NameFood=$nameFood&PathImage=$urlPathImage&Price=$price&Detail=$detail';
+        await Dio().get(urlInsertData).then((value) => Navigator.pop(context));
+      });
+    } catch (e) {}
   }
 
   Widget nameForm() => Container(
