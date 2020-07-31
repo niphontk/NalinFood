@@ -21,8 +21,12 @@ class _ShowShopFoodMenuState extends State<ShowShopFoodMenu> {
     // TODO: implement initState
     super.initState();
     userModel = widget.userModel;
-    listWidgets.add(AboutShop(userModel: userModel,));
-    listWidgets.add(ShowMenuFood());
+    listWidgets.add(AboutShop(
+      userModel: userModel,
+    ));
+    listWidgets.add(ShowMenuFood(
+      userModel: userModel,
+    ));
   }
 
   BottomNavigationBarItem aboutShopNav() {
@@ -45,7 +49,9 @@ class _ShowShopFoodMenuState extends State<ShowShopFoodMenu> {
       appBar: AppBar(
         title: Text(userModel.nameShop),
       ),
-      body: listWidgets.length == 0  ? MyStyle().showProgress() : listWidgets[indexPage] ,
+      body: listWidgets.length == 0
+          ? MyStyle().showProgress()
+          : listWidgets[indexPage],
       bottomNavigationBar: showBottonNavigatorBar(),
     );
   }
