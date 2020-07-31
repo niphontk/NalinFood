@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:food/model/user_model.dart';
-import 'package:food/utility/my_constant.dart';
 import 'package:food/utility/my_style.dart';
 import 'package:food/utility/signout_process.dart';
+import 'package:food/widget/show_list_shop_all.dart';
+import 'package:food/widget/show_status_food_order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainUser extends StatefulWidget {
@@ -16,37 +12,17 @@ class MainUser extends StatefulWidget {
 
 class _MainUserState extends State<MainUser> {
   String nameUser;
-  List<UserModel> userModels = List();
-  List<Widget> shopCards = List();
+  Widget currentWidget;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    currentWidget = ShowListShopAll();
     findUser();
-    readShop();
   }
 
-  Future<Null> readShop() async {
-    String url =
-        '${MyConstant().domain}/nalinfood/getUserWhereChooseType.php?isAdd=true&ChooseType=Shop';
-    await Dio().get(url).then((value) {
-      // print('value ==>> $value');
-      var result = json.decode(value.data);
-      for (var map in result) {
-        UserModel model = UserModel.fromJson(map);
-
-        String nameShop = model.nameShop;
-        if (nameShop.isNotEmpty) {
-          print('NameShop==>> ${model.nameShop}');
-          setState(() {
-            userModels.add(model);
-            shopCards.add(createCard(model));
-          });
-        }
-      }
-    });
-  }
+  
 
   Future<Null> findUser() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -68,56 +44,89 @@ class _MainUserState extends State<MainUser> {
         ],
       ),
       drawer: showDrawer(),
-      body: shopCards.length == 0
-          ? MyStyle().showProgress()
-          : GridView.extent(
-              maxCrossAxisExtent: 280.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              children: shopCards,
-            ),
+      body: currentWidget,
     );
   }
 
   Drawer showDrawer() => Drawer(
-        child: ListView(
-          children: <Widget>[
-            showHead(),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                showHead(),
+                menuListShop(),
+                menuStatusFoodOrder(),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                menuSignOut(),
+              ],
+            ),
           ],
         ),
       );
+
+  ListTile menuListShop() {
+    return ListTile(onTap: () {
+      Navigator.pop(context);
+      setState(() {
+        currentWidget = ShowListShopAll();
+      });
+    },
+      leading: Icon(Icons.home),
+      title: Text('แสดงร้านค้า'),
+      subtitle: Text('แสดงร้านค้า ที่สามารถสั่งอาหารได้'),
+    );
+  }
+
+    ListTile menuStatusFoodOrder() {
+    return ListTile(onTap: () {
+      Navigator.pop(context);
+      setState(() {
+        currentWidget = ShowStatusFoodOrder();
+      });
+    },
+      leading: Icon(Icons.restaurant_menu),
+      title: Text('แสดงรายการอาหารที่สั่ง'),
+      subtitle: Text('แสดงรายการอาหารที่สั่ง และยังไม่ได้จัดส่ง'),
+    );
+  }
+
+  Widget menuSignOut() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.red.shade700),
+      child: ListTile(
+        onTap: () => signOutProcess(context),
+        leading: Icon(
+          Icons.exit_to_app,
+          color: Colors.white,
+        ),
+        title: Text(
+          'Sign Out',
+          style: TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          'ออกจากระบบ',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
 
   UserAccountsDrawerHeader showHead() {
     return UserAccountsDrawerHeader(
       decoration: MyStyle().myBoxDecoration('user.jpg'),
       currentAccountPicture: MyStyle().showLogo(),
       accountName: Text(
-        'Name Login',
+        nameUser == null ? 'Name Login' : nameUser,
         style: TextStyle(color: MyStyle().darkColor),
       ),
       accountEmail: Text(
         'Login',
-        style: TextStyle(color: MyStyle().darkColor),
-      ),
-    );
-  }
-
-  Widget createCard(UserModel userModel) {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 80.0,
-            height: 80.0,
-            child: CircleAvatar(
-              backgroundImage:
-                  NetworkImage('${MyConstant().domain}${userModel.urlPicture}'),
-            ),
-          ),
-          MyStyle().mySizebox(),
-          MyStyle().showTitleH3(userModel.nameShop),
-        ],
+        style: TextStyle(color: MyStyle().primaryColor),
       ),
     );
   }
