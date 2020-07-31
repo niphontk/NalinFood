@@ -42,11 +42,11 @@ class _ListFoodMenuShopState extends State<ListFoodMenuShop> {
         loadStatus = false;
       });
       if (value.toString() != 'null') {
-        //print('value ==>> $value');
+        print('value ==>> $value');
 
         var result = json.decode(value.data);
 
-        //print('result ==>> $result');
+        print('result ==>> $result');
 
         for (var map in result) {
           FoodModel foodModel = FoodModel.fromJson(map);
