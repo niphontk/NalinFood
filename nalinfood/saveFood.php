@@ -7,7 +7,7 @@ $response->status = null;
 $response->message = null;
 
 // Uploading file
-$destination_dir = "Shop/";
+$destination_dir = "Food/";
 $base_filename = basename($_FILES["file"]["name"]);
 $target_file = $destination_dir . $base_filename;
 

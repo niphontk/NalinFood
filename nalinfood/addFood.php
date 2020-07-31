@@ -18,14 +18,15 @@ if (!$link->set_charset("utf8")) {
 	}
 
 if (isset($_GET)) {
-	if ($_GET['isAdd'] == 'true') {
-				
-		$Name = $_GET['Name'];
-		$User = $_GET['User'];
-		$Password = $_GET['Password'];
-		$ChooseType = $_GET['ChooseType'];
+	if ($_GET['isAdd'] == 'true') {				
+		
+		$idShop = $_GET['idShop'];		
+		$NameFood = $_GET['NameFood'];
+		$PathImage = $_GET['PathImage'];
+		$Price = $_GET['Price'];
+		$Detail = $_GET['Detail'];
 							
-		$sql = "INSERT INTO `user`(`id`, `ChooseType`, `Name`, `User`, `Password`, `NameShop`, `Address`, `Phone`, `urlPicture`, `Lat`, `Lng`, `Token`) VALUES (Null,'$ChooseType','$Name','$User','$Password','','','','','','','')";
+		$sql = "INSERT INTO `foodTable`(`id`, `idShop`, `NameFood`, `PathImage`, `Price`, `Detail`) VALUES (Null,'$idShop','$NameFood','$PathImage','$Price','$Detail')";
 
 		$result = mysqli_query($link, $sql);
 

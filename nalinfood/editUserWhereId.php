@@ -17,15 +17,19 @@ if (!$link->set_charset("utf8")) {
     exit();
 	}
 
+
 if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
-				
-		$Name = $_GET['Name'];
-		$User = $_GET['User'];
-		$Password = $_GET['Password'];
-		$ChooseType = $_GET['ChooseType'];
+			
+		$id = $_GET['id'];		
+		$NameShop = $_GET['NameShop'];
+		$Address = $_GET['Address'];
+		$Phone = $_GET['Phone'];
+		$UrlPicture = $_GET['UrlPicture'];
+		$Lat = $_GET['Lat'];
+		$Lng = $_GET['Lng'];
 							
-		$sql = "INSERT INTO `user`(`id`, `ChooseType`, `Name`, `User`, `Password`, `NameShop`, `Address`, `Phone`, `urlPicture`, `Lat`, `Lng`, `Token`) VALUES (Null,'$ChooseType','$Name','$User','$Password','','','','','','','')";
+		$sql = "UPDATE `user` SET `NameShop` = '$NameShop',`Address` = '$Address',`Phone` = '$Phone',`UrlPicture` = '$UrlPicture',`Lat` = '$Lat',`Lng` = '$Lng' WHERE id = '$id'";
 
 		$result = mysqli_query($link, $sql);
 
@@ -38,5 +42,6 @@ if (isset($_GET)) {
 	} else echo "Welcome Nalin Food";
    
 }
+
 	mysqli_close($link);
 ?>
