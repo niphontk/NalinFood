@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:food/screens/show_cart.dart';
 
 class MyStyle {
   Color darkColor = Colors.blue.shade900;
   Color primaryColor = Colors.green;
 
-  Widget showProgress(){
-    return Center(child: CircularProgressIndicator(),);
+  Widget iconShowCart(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.add_shopping_cart),
+      onPressed: () {
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (context) => ShowCart(),
+        );
+        Navigator.push(context, route);
+      },
+    );
+  }
+
+  Widget showProgress() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 
   BoxDecoration myBoxDecoration(String namePic) {
@@ -22,13 +37,16 @@ class MyStyle {
         height: 16.0,
       );
 
-  TextStyle mainTitle = TextStyle(color: Colors.purple,fontSize: 20.0,fontWeight: FontWeight.bold);
+  TextStyle mainTitle = TextStyle(
+      color: Colors.purple, fontSize: 20.0, fontWeight: FontWeight.bold);
 
-  TextStyle mainTitleH2 = TextStyle(color: Colors.green,fontSize: 18.0,fontWeight: FontWeight.bold);
+  TextStyle mainTitleH2 = TextStyle(
+      color: Colors.green, fontSize: 18.0, fontWeight: FontWeight.bold);
 
   Widget titleCenter(BuildContext context, String string) {
     return Center(
-      child: Container(width: MediaQuery.of(context).size.width*0.5,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.5,
         child: Text(
           string,
           style: TextStyle(
@@ -58,11 +76,20 @@ class MyStyle {
         ),
       );
 
-        Text showTitleH3(String title) => Text(
+  Text showTitleH3(String title) => Text(
         title,
         style: TextStyle(
           fontSize: 16.0,
           color: Colors.blue.shade900,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+
+      Text showTitleH3Red(String title) => Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.red.shade900,
           fontWeight: FontWeight.bold,
         ),
       );

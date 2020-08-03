@@ -2,7 +2,7 @@
 header("content-type:text/javascript;charset=utf-8");
 error_reporting(0);
 error_reporting(E_ERROR | E_PARSE);
-$link = mysqli_connect('localhost', 'root', '123456', "nalinfood");
+$link = mysqli_connect('localhost', 'root', '', "nalinfood");
 
 if (!$link) {
     echo "Error: Unable to connect to MySQL." . PHP_EOL;
@@ -22,7 +22,7 @@ if (isset($_GET)) {
 				
 		$idShop = $_GET['idShop'];
 
-		$result = mysqli_query($link, "SELECT * FROM foodTable WHERE idShop = '$idShop'");
+		$result = mysqli_query($link, "SELECT * FROM foodtable WHERE idShop = '$idShop'");
 
 		if ($result) {
 

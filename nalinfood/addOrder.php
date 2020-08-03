@@ -17,19 +17,23 @@ if (!$link->set_charset("utf8")) {
     exit();
 	}
 
-
 if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
-			
-		$id = $_GET['id'];		
+				
+		$OrderDateTime = $_GET['OrderDateTime'];
+		$idShop = $_GET['idShop'];
 		$NameShop = $_GET['NameShop'];
-		$Address = $_GET['Address'];
-		$Phone = $_GET['Phone'];
-		$UrlPicture = $_GET['UrlPicture'];
-		$Lat = $_GET['Lat'];
-		$Lng = $_GET['Lng'];
+		$Distance = $_GET['Distance'];
+		$Transport = $_GET['Transport'];
+		$idFood = $_GET['idFood'];
+		$NameFood = $_GET['NameShop'];
+		$Price = $_GET['Price'];
+		$Amount = $_GET['Amount'];
+		$Sum = $_GET['Sum'];
+		$idRider = $_GET['idRider'];
+		$Status = $_GET['Status'];
 							
-		$sql = "UPDATE `user` SET `NameShop` = '$NameShop',`Address` = '$Address',`Phone` = '$Phone',`UrlPicture` = '$UrlPicture',`Lat` = '$Lat',`Lng` = '$Lng' WHERE id = '$id'";
+		$sql = "INSERT INTO `ordertable`(`id`, `OrderDateTime`, `idShop`, `NameShop`, `Distance`, `Transport`, `idFood`, `NameFood`, `Price`, `Amount`, `Sum`, `idRider`, `Status`) VALUES (Null,'$OrderDateTime','$idShop','$NameShop','$Distance','$Transport','$idFood','$NameShop','$Price','$Amount','$Sum','$idRider','$Status')";
 
 		$result = mysqli_query($link, $sql);
 
@@ -42,6 +46,5 @@ if (isset($_GET)) {
 	} else echo "Welcome Nalin Food";
    
 }
-
 	mysqli_close($link);
 ?>
