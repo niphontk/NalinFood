@@ -49,9 +49,6 @@ class _AboutShopState extends State<AboutShop> {
       print('transport = $transport');
     });
   }
-
-  
-
   
 
   Future<LocationData> findLocationData() async {

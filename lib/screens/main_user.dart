@@ -17,7 +17,6 @@ class _MainUserState extends State<MainUser> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentWidget = ShowListShopAll();
     findUser();
@@ -34,13 +33,13 @@ class _MainUserState extends State<MainUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(nameUser == null ? 'Main User' : '$nameUser login'),
+        title: Text(nameUser == null ? 'Main User' : 'สวัสดีคุณ $nameUser'),
         actions: <Widget>[
           MyStyle().iconShowCart(context),
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () => signOutProcess(context),
-          )
+          // IconButton(
+          //   icon: Icon(Icons.exit_to_app),
+          //   onPressed: () => signOutProcess(context),
+          // )
         ],
       ),
       drawer: showDrawer(),

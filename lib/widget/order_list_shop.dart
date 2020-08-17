@@ -10,22 +10,16 @@ class OrderListShop extends StatefulWidget {
 }
 
 class _OrderListShopState extends State<OrderListShop> {
-
   UserModel userModel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'แสดงรายการอาหารที่ลูกค้าสั่ง'
-    );
+    return Text('แสดงรายการอาหารที่ลูกค้าสั่ง');
   }
 }

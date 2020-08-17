@@ -6,6 +6,7 @@ import 'package:food/utility/my_style.dart';
 import 'package:food/utility/normal_dialog.dart';
 import 'package:food/utility/sqlite_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 class ShowCart extends StatefulWidget {
@@ -324,13 +325,17 @@ class _ShowCartState extends State<ShowCart> {
     String amount = amounts.toString();
     String sum = sums.toString();
 
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String idUser = preferences.getString('id');
+    String nameUser = preferences.getString('Name');
+
     print(
-        'orderDateTime = $orderDateTime, idShop = $idShop, nameShop = $nameShop, distance = $distance, transport = $transport');
+        'orderDateTime = $orderDateTime, idShop = $idShop, nameShop = $nameShop, distance = $distance, transport = $transport, idUser = $idUser, NameUser = $nameUser');
     print(
         'idFood = $idFood, nameFood = $nameFood, price = $price, amount = $amount, sum = $sum');
 
     String url =
-        '${MyConstant().domain}/nalinfood/addOrder.php?isAdd=true&OrderDateTime=$orderDateTime&idShop=$idShop&NameShop=$nameShop&Distance=$distance&Transport=$transport&idFood=$idFood&NameFood=$nameFood&Price=$price&Amount=$amount&Sum=$sum&idRider=none&Status=UserOrder';
+        '${MyConstant().domain}/nalinfood/addOrder.php?isAdd=true&OrderDateTime=$orderDateTime&idShop=$idShop&NameShop=$nameShop&Distance=$distance&Transport=$transport&idFood=$idFood&NameFood=$nameFood&Price=$price&Amount=$amount&Sum=$sum&idRider=none&Status=UserOrder&idUser=$idUser&NameUser=$nameUser';
 
     await Dio().get(url).then((value) {
       if (value.toString() == 'true') {
