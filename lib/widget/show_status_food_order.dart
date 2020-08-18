@@ -107,7 +107,7 @@ class _ShowStatusFoodOrderState extends State<ShowStatusFoodOrder> {
   ListView buildListViewMenuFood(int index) => ListView.builder(
         shrinkWrap: true,
         physics: ScrollPhysics(),
-        itemCount: listMenuFoods.length,
+        itemCount: listMenuFoods[index].length,
         itemBuilder: (context, index2) => Row(
           children: [
             Expanded(
@@ -229,7 +229,7 @@ class _ShowStatusFoodOrderState extends State<ShowStatusFoodOrder> {
           List<String> prices = changeArray(model.price);
           List<String> amounts = changeArray(model.amount);
           List<String> sums = changeArray(model.sum);
-          // print('menuFoods ===> $menuFoods');
+          print('menuFoods ===> $menuFoods');
 
           int status = 0;
           switch (model.status) {
@@ -247,6 +247,7 @@ class _ShowStatusFoodOrderState extends State<ShowStatusFoodOrder> {
               break;
             default:
           }
+
           int total = 0;
           for (var string in sums) {
             total = total + int.parse(string.trim());

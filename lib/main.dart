@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
-        fontFamily: 'Sarabun',
+        // fontFamily: 'Sarabun',
       ),
       title: 'Nalin Food',
       home: Home(),
